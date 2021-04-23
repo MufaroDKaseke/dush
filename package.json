@@ -1,5 +1,5 @@
 {
-  "name": "dush",
+  "name": "dush-logger",
   "version": "1.0.0",
   "description": "A logging module for Node.js apps",
   "main": "index.js",

@@ -5,9 +5,9 @@ Easy, flexible, clean log file manager for [node](https://nodejs.org)
 ## Installation
 
 ```console
-npm i dush
+npm i dush-logger
 
-npm install dush
+npm install dush-logger
 ```
 
 ## Documentation
@@ -15,7 +15,7 @@ npm install dush
 ### Basic Use
 
 ```js
-const dush = require('dush');
+const dush = require('dush-logger');
 let myVariable = true;
 
 // Do Something
@@ -84,7 +84,7 @@ dush.clearLevel('info');
 Deletes the log level ,any further attempt to use the level will result `false` and produce a message.
 
 ```js
-const dush = require('dush');
+const dush = require('dush-logger');
 
 // Delete error level
 dush.deleteLevel('error');
