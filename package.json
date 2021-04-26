@@ -1,11 +1,20 @@
 {
   "name": "dush-logger",
-  "version": "1.0.0",
+  "version": "1.1.6",
   "description": "A logging module for Node.js apps",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+  	"type": "git",
+  	"url": "git+https://github.com/MufaroDKaseke/dush.git"
+  },
+  "keywords": [
+  	"dush",
+  	"logging",
+  	"log files",
+  ],
   "author": "Mufaro D Kaseke",
   "license": "ISC"
 }
