@@ -78,7 +78,7 @@ class Dush {
 
   getConfigFile() {
 
-    let configFile = 'playground.json';
+    let configFile = 'dush-logger.json';
     let config;
 
     let files = fs.readdirSync('./');
