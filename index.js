@@ -1,33 +1,54 @@
-
 const fs = require('fs');
 const path = require('path');
+const chalk = require('chalk');
 
 class Dush {
   constructor() {
     this.pref = {
       file: './main.log',
+      config: 'dush-config.json',
       use_individual_files: false,
       dateFormat: 'nothing-yet',
       levels: {
         info: {
+          color:'#ffffff',
           prefix: 'INFO',
           file: 'logs/info.log'
         },
-        warning: {
+        debug: {
+          color:'#1e7e34',
+          prefix: 'DEBUG',
+          file: 'logs/debug.log'
+        },
+        verbose: {
+          color:'#28a745',
+          prefix: 'VERBOSE',
+          file: 'logs/verbose.log'
+        },
+        notice: {
+          color:'#007bff',
+          prefix: 'NOTICE',
+          file: 'logs/notice.log'
+        },
+        success: {
+          color:'#28a745',
+          prefix: 'INFO',
+          file: 'logs/info.log'
+        },
+        warn: {
+          color:'#ffc107',
           prefix: 'WARN',
           file: 'logs/warning.log'
         },
         error: {
+          color:'#dc3545',
           prefix: 'ERROR',
           file: 'logs/error.log'
         },
         critical: {
+          color:'#fd7e14',
           prefix: 'CRITIC',
           file: 'logs/critical.log'
-        },
-        verbose: {
-          prefix: 'VERBOSE',
-          file: 'logs/verbose.log'
         }
       }
     };
@@ -45,11 +66,9 @@ class Dush {
     // Create Methods
     for (const level in this.pref.levels) {
       let name = level;
-      let prefix = this.pref.levels[level].prefix;
-      let file = this.pref.levels[level].file;
-      this.createLevel(name ,prefix ,file);
+      let options = this.pref.levels[name];
+      this.createLevel(name ,options);
     }
-
     return true;
   }
 
@@ -78,7 +97,7 @@ class Dush {
 
   getConfigFile() {
 
-    let configFile = 'dush-logger.json';
+    let configFile = this.pref.config;
     let config;
 
     let files = fs.readdirSync('./');
@@ -117,122 +136,131 @@ class Dush {
   get getCurrentTime() {
     let date = new Date();
 
-  // Date
-  let day = date.getDate();
-  let month = date.getMonth();
-  let year = date.getFullYear();
-  year = String(year);
-  year = year.split('').reverse().join('');
-  year = year.charAt(1) + year.charAt(0);
+    // Date
+    let day = date.getDate();
+    let month = date.getMonth();
+    let year = date.getFullYear();
+    year = String(year);
+    year = year.split('').reverse().join('');
+    year = year.charAt(1) + year.charAt(0);
 
-  // Time
-  let hour = (date.getHours() >= 10) ? date.getHours() : '0' + date.getHours();
-  let minutes = (date.getMinutes() >= 10) ? date.getMinutes() : '0' + date.getMinutes();
-  let seconds = (date.getSeconds() >= 10) ? date.getSeconds() : '0' + date.getSeconds();
+    // Time
+    let hour = (date.getHours() >= 10) ? date.getHours() : '0' + date.getHours();
+    let minutes = (date.getMinutes() >= 10) ? date.getMinutes() : '0' + date.getMinutes();
+    let seconds = (date.getSeconds() >= 10) ? date.getSeconds() : '0' + date.getSeconds();
 
 
-  let currentTime = '[' + month + '/' + day + '/' + year + ', ' + hour + ':' + minutes + ':' + seconds + ']';
+    let currentTime = '[' + month + '/' + day + '/' + year + ', ' + hour + ':' + minutes + ':' + seconds + ']';
 
-  return currentTime;
-}
-
-rectFile(file) {
-  let dir = path.dirname(file);
-  fs.mkdirSync(dir, {recursive:true});
-  return true;
-}
-
-getLogFile(level) {
-  let logFile;
-  if (this.pref.use_individual_files) {
-    logFile = this.pref.levels[level].file;
-    if(this.rectFile(logFile)) {
-      return logFile;
-    }
-  } else {
-    logFile = this.pref.file;
-    if(this.rectFile(logFile)) {
-      return logFile;
-    }
+    return currentTime;
   }
-}
 
-getPrefix(level) {
-  if (this.pref.levels[level].prefix !== ``) {
-    return this.pref.levels[level].prefix;
-  } else {
-    return catergory.toUpperCase();
+  rectFile(file) {
+    let dir = path.dirname(file);
+    fs.mkdirSync(dir, {recursive:true});
+    return true;
   }
-}
 
-viewLog(level) {
-  let preLogMsg;
-  let logToView;
-  if(level !== undefined && level !== '') {
-    if(this.pref.levels[level].file !== undefined && this.pref.levels[level].file !== '') {
-      logToView = this.pref.levels[level].file;
-      preLogMsg = `Reading Log File \nFileType : Individual Log\nFileName : ${logToView}\n\n==============================START==============================\n`;
+  getLogFile(level) {
+    let logFile;
+    if (this.pref.use_individual_files) {
+      logFile = this.pref.levels[level].file;
+      if(this.rectFile(logFile)) {
+        return logFile;
+      }
     } else {
-      console.error('Error : Category file is empty or category does not exist!!!');
+      logFile = this.pref.file;
+      if(this.rectFile(logFile)) {
+        return logFile;
+      }
+    }
+  }
+
+  getPrefix(level) {
+    if (this.pref.levels[level].prefix !== ``) {
+      return this.pref.levels[level].prefix;
+    } else {
+      return level.toUpperCase();
+    }
+  }
+
+  viewLog(level) {
+    let preLogMsg;
+    let logToView;
+    if(level !== undefined && level !== '') {
+      if(this.pref.levels[level].file !== undefined && this.pref.levels[level].file !== '') {
+        logToView = this.pref.levels[level].file;
+        preLogMsg = `Reading Log File \nFileType : Individual Log\nFileName : ${logToView}\n\n==============================START==============================\n`;
+      } else {
+        console.error('Error : Category file is empty or category does not exist!!!');
+      }
+
+    } else {
+      logToView = this.pref.file;
+      preLogMsg = `Reading Log File \nFileType : Main Log\nFileName : ${logToView}\n\n==============================START==============================\n`;
+    }
+    var postLogMsg = '\n==============================End================================';
+    fs.readFile(logToView, 'utf8', (err, data) => {
+      if (err) throw err;
+      console.log(`${preLogMsg}${data}${postLogMsg}`);
+    });
+  }
+
+  printMsg(level ,message) {
+    let color = this.pref.levels[level].color;
+    console.log(chalk.hex(color).bold(level) + ` : ${message}`);
+  }
+
+  createLevel(name ,options) {
+    if (name !== undefined) {
+      let levelPrefix = (options.prefix !== undefined) ? options.prefix : name.toUpperCase();
+      let levelFile = (options.file !== undefined) ? options.file : `./logs/${name}.log`;
+      let levelColor = (options.color !== undefined) ? options.color : '';
+      this.pref.levels[name] = {
+        color : `${levelColor}`,
+        prefix : `${levelPrefix}`,
+        file : `${levelFile}`,
+      };
+
+      this[name] = function(message) {
+        const logTime = this.getCurrentTime;
+        const prefix = this.getPrefix(name);
+        const data = `${logTime} [${prefix}] ${message}\n`;
+        const fileToLog = this.getLogFile(name);
+        fs.appendFile(fileToLog, data, 'utf8', (err) => {
+          if (err) {
+            throw err;
+          } else {
+            this.printMsg(`${name}` ,message);
+          }
+        });
+      };
+    }
+  }
+
+
+  clearLevel(level) {
+    let fileToClear;
+    if (Object.prototype.hasOwnProperty.call(this.pref.levels, level)) {
+      fileToClear = this.pref.levels[level].file;
+    } else if (level === 'main') {
+      fileToClear = this.pref.file;
+    } else {
+      console.error(`Error : Level doesn't exist`);
     }
 
-  } else {
-    logToView = this.pref.file;
-    preLogMsg = `Reading Log File \nFileType : Main Log\nFileName : ${logToView}\n\n==============================START==============================\n`;
+    fs.writeFile(fileToClear, '', 'utf8', (err) => {
+      if (err) throw err;
+      console.log(`Cleared log level : '${level}'`);
+    });
   }
-  var postLogMsg = '\n==============================End================================';
-  fs.readFile(logToView, 'utf8', (err, data) => {
-    if (err) throw err;
-    console.log(`${preLogMsg}${data}${postLogMsg}`);
-  });
-}
 
-createLevel(name ,prefix ,file) {
-  if (name !== undefined) {
-    let levelPrefix = (prefix !== undefined) ? prefix : name.toUpperCase();
-    let levelFile = (file !== undefined) ? file : `./logs/${name}.log`;
-    this.pref.levels[name] = {
-      prefix : `${levelPrefix}`,
-      file : `${levelFile}`
-    };
-
-    this[name] = function(message) {
-      const logTime = this.getCurrentTime;
-      const prefix = this.getPrefix(name);
-      const data = `${logTime} [${prefix}] ${message}\n`;
-      const fileToLog = this.getLogFile(name);
-      fs.appendFile(fileToLog, data, 'utf8', (err) => {
-        if (err) throw err;
-          //console.log(`New ${name} log message recorded at ${fileToLog}`);
-        });
+  deleteLevel(level) {
+    delete this.pref.levels[level];
+    this[level] = function () {
+      console.warn(`Sorry!!! You can't use level '${level}', it was deleted\nuse dush.createLevel('${level}') to create it again`);
     };
   }
-
-}
-
-
-clearLevel(level) {
-  let fileToClear;
-  if (Object.prototype.hasOwnProperty.call(this.pref.levels, level)) {
-    fileToClear = this.pref.levels[level].file;
-  } else if (level === 'main') {
-    fileToClear = this.pref.file;
-  } else {
-    console.error(`Error : Level doesn't exist`);
-  }
-
-  fs.writeFile(fileToClear, '', 'utf8', (err) => {
-    if (err) throw err;
-    console.log(`Cleared log level : '${level}'`);
-  });
-}
-
-deleteLevel(level) {
-  delete this.pref.levels[level];
-  this[level] = function () {
-    console.warn(`Sorry!!! You can't use level '${level}', it was deleted\nuse dush.createLevel('${level}') to create it again`);
-  };
-}
 }
 
 module.exports = new Dush();

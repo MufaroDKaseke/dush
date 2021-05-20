@@ -41,25 +41,30 @@ Enter a new log message
   
   // Below are the default log levels
   dush.info('This is an info log message');
-  dush.warning('This is a warning log message');
+  dush.notice('This is a notice log message');
+  dush.success('This is a success log message');
+  dush.warn('This is a warning log message');
   dush.error('This is an error log message');
+  dush.debug('This is a debug log message');
   dush.critical('This is is critical log message');
   dush.verbose('This is a verbose log message');
 
 ```
 
-#### dush.createLevel(level, prefix, file)
+#### dush.createLevel(level, options)
 
 + `level` {String}
-+ `prefix` {String}
-+ `file` {String}
++ `options` {Object} 
+    - `color`: {String} Log level color(hex)
+    * `prefix`: {String} String to be used as prefix of log message
+    * `file`: {String} File path for the level
 
 Create a new log level
 
 ```js
 
 // Create new level named server
-dush.createLevel('server', 'SERV' ,'./logs/server.log');
+dush.createLevel('server', {prefix: 'SERV',color: '#28a745', file:'./logs/server.log'});
 
 // Use the created level
 dush.server('New log messages under the server level');
@@ -107,41 +112,63 @@ dush.viewLog('critical');
 
 + `options` {Object} 
     * `file`: {String} Set path for default log file
+    * `config`: {String} Path of dush configuration file
     * `use_individual_files`: {Boolean} `true` | `false`  Set to true to write in level's independent files
     * `levels`: {Object} A showing level configurations including new levels
         - `<level>` {Object} Level configuration 
-            + `prefix` : {String} String to be used as prefix of log message
-            + `file` : {String} File path for the level
+            + `color`: {String} Log level color(hex)
+            + `prefix`: {String} String to be used as prefix of log message
+            + `file`: {String} File path for the level
 
 Set options for dush
 
 ```js
 /* Below are default options
 {
-  file: './main.log',
-  use_individual_files: false,
-  dateFormat: 'nothing-yet',
-  levels: {
-    info: {
-      prefix: 'INFO',
-      file: 'logs/info.log'
-    },
-    warning: {
-      prefix: 'WARN',
-      file: 'logs/warning.log'
-    },
-    error: {
-      prefix: 'ERROR',
-      file: 'logs/error.log'
-    },
-    critical: {
-      prefix: 'CRITIC',
-      file: 'logs/critical.log'
-    },
-    verbose: {
-      prefix: 'VERBOSE',
-      file: 'logs/verbose.log'
-    }
+file: './main.log',
+config: 'playground.json',
+use_individual_files: false,
+dateFormat: 'nothing-yet',
+levels: {
+  info: {
+    color:'#ffffff',
+    prefix: 'INFO',
+    file: 'logs/info.log'
+  },
+  debug: {
+    color:'#1e7e34',
+    prefix: 'DEBUG',
+    file: 'logs/debug.log'
+  },
+  verbose: {
+    color:'#28a745',
+    prefix: 'VERBOSE',
+    file: 'logs/verbose.log'
+  },
+  notice: {
+    color:'#007bff',
+    prefix: 'NOTICE',
+    file: 'logs/notice.log'
+  },
+  success: {
+    color:'#28a745',
+    prefix: 'INFO',
+    file: 'logs/info.log'
+  },
+  warn: {
+    color:'#ffc107',
+    prefix: 'WARN',
+    file: 'logs/warning.log'
+  },
+  error: {
+    color:'#dc3545',
+    prefix: 'ERROR',
+    file: 'logs/error.log'
+  },
+  critical: {
+    color:'#fd7e14',
+    prefix: 'CRITIC',
+    file: 'logs/critical.log'
   }
 }*/
 
