@@ -1,6 +1,6 @@
 # DUSH-LOGGER
 
-Easy, flexible, clean log file manager for [node](https://nodejs.org)
+Easy, flexible, clean file logger for [node](https://nodejs.org)
 
 ## Installation
 
@@ -74,6 +74,7 @@ dush.server('New log messages under the server level');
 #### dush.clearLevel(level)
 
 + `level` {String}
+
 NB : Set level to 'main' to clear the main or default log file
 
 Deletes all the log messages previously written under the level.
@@ -112,7 +113,6 @@ dush.viewLog('critical');
 
 + `options` {Object} 
     * `file`: {String} Set path for default log file
-    * `config`: {String} Path of dush configuration file
     * `use_individual_files`: {Boolean} `true` | `false`  Set to true to write in level's independent files
     * `levels`: {Object} A showing level configurations including new levels
         - `<level>` {Object} Level configuration 
@@ -126,7 +126,6 @@ Set options for dush
 /* Below are default options
 {
 file: './main.log',
-config: 'playground.json',
 use_individual_files: false,
 dateFormat: 'nothing-yet',
 levels: {
@@ -152,8 +151,8 @@ levels: {
   },
   success: {
     color:'#28a745',
-    prefix: 'INFO',
-    file: 'logs/info.log'
+    prefix: 'SUCCESS',
+    file: 'logs/SUCCESS.log'
   },
   warn: {
     color:'#ffc107',
@@ -179,14 +178,14 @@ dush.init({
             'prefix': 'INFORMATION' 
         },
         'debug': {
-            'prefix': 'DEBUG',
-            'file': './logs/debug.log'
+            'prefix': 'DEBUGING',
+            'file': './logs/debugger.log'
         }
     }
 });
 ```
 
-NB : Use the configuration file instead of `dush.init` if ou want to set override options across files
+NB : Use the configuration file instead of `dush.init` if you want to set override options across multiple files
 
 #### dush.setLogFile(level, file)
 
@@ -209,8 +208,10 @@ dush.info('New info log message');
 
 Dush allows you to override default options using the dush configuration file. You simply create a `dush-config.json` file in the directory containing your node app file.
 
-// Example dush-config.json
+**Example dush-config.json**
+
 ```json
+
 {
   "use_individual_files": true,
   "levels": {
@@ -225,5 +226,3 @@ Dush allows you to override default options using the dush configuration file. Y
 }
 
 ```
-
-NB : For now dush still has only a few options

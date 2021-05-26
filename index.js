@@ -6,7 +6,6 @@ class Dush {
   constructor() {
     this.pref = {
       file: './main.log',
-      config: 'dush-config.json',
       use_individual_files: false,
       dateFormat: 'nothing-yet',
       levels: {
@@ -32,8 +31,8 @@ class Dush {
         },
         success: {
           color:'#28a745',
-          prefix: 'INFO',
-          file: 'logs/info.log'
+          prefix: 'SUCCESS',
+          file: 'logs/success.log'
         },
         warn: {
           color:'#ffc107',
@@ -97,7 +96,7 @@ class Dush {
 
   getConfigFile() {
 
-    let configFile = this.pref.config;
+    let configFile = 'dush-config.json';
     let config;
 
     let files = fs.readdirSync('./');
