@@ -152,7 +152,7 @@ levels: {
   success: {
     color:'#28a745',
     prefix: 'SUCCESS',
-    file: 'logs/SUCCESS.log'
+    file: 'logs/success.log'
   },
   warn: {
     color:'#ffc107',
